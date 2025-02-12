@@ -16,7 +16,7 @@ const startServer = async () => {
     app.use("/api/category", require("./routes/category"));
 
     app.listen(port, () => {
-      console.log(`App listening on ${port}`);
+      console.log(`Finance Tracking listening on ${port}`);
     });
   } catch (error) {
     console.error("Failed to start the server", error);
