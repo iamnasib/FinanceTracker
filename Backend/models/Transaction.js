@@ -19,7 +19,6 @@ const TransactionSchema = new mongoose.Schema({
   toAccount: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "account",
-    required: true,
   },
   description: {
     type: String,
@@ -27,6 +26,11 @@ const TransactionSchema = new mongoose.Schema({
   },
   amount: {
     type: Number,
+    required: true,
+  },
+  category: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "category",
     required: true,
   },
   createdOn: {

@@ -14,6 +14,7 @@ const startServer = async () => {
     app.use("/api/auth", require("./routes/auth"));
     app.use("/api/account", require("./routes/accounts"));
     app.use("/api/category", require("./routes/category"));
+    app.use("/api/transaction", require("./routes/transaction"));
 
     app.listen(port, () => {
       console.log(`Finance Tracking listening on ${port}`);
