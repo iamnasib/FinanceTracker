@@ -1,15 +1,27 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
+import BottomNav from "./components/bottomNav";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import TopNav from "./components/topnav";
+import Home from "./components/Home";
+import Alert from "./components/Alert";
 
 function App() {
-  const [count, setCount] = useState(0);
-
+  const appName = "Trance";
   return (
-    <>
-      <div className="h-8 w-8 bg-red-500"></div>
-    </>
+    <Router>
+      <Alert
+        alert={true}
+        type='success'
+        message='asdasdasdasdasdasd'
+        description='sadddddddddddddddddddddddddddd'
+      />
+      <TopNav />
+      <Routes>
+        <Route path='/' element={<Home />} />
+      </Routes>
+
+      <BottomNav />
+    </Router>
   );
 }
 
