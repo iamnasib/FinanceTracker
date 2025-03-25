@@ -26,23 +26,38 @@ const NavItem = ({icon, label, href, isActive, isPrimary}) => {
 
 const BottomNav = () => {
   return (
-    <div className='fixed bottom-0 left-0 right-0 z-50 bg-white/70'>
-      <div className='mx-auto '>
-        <div className='flex items-center justify-between border-t border-t-slate-200 p-2 px-4 '>
-          <NavItem icon={<Home size={20} />} label='Home' href='/' isActive />
-          <NavItem icon={<CreditCard size={20} />} label='Card' href='/card' />
-          <NavItem
-            icon={<Plus size={22} />}
-            label=''
-            href='/actions'
-            isPrimary
-          />
-          <NavItem icon={<BarChart2 size={20} />} label='Stat' href='/stats' />
-          <NavItem icon={<User size={20} />} label='Profile' href='/profile' />
+    <>
+      <div className='h-16 sm:h-20' />
+      <div className='fixed bottom-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-2xl'>
+        <div className='mx-auto '>
+          <div className='flex items-center justify-between border-t border-t-slate-200 p-2 px-4 '>
+            <NavItem icon={<Home size={20} />} label='Home' href='/' isActive />
+            <NavItem
+              icon={<CreditCard size={20} />}
+              label='Card'
+              href='/card'
+            />
+            <NavItem
+              icon={<Plus size={22} />}
+              label=''
+              href='/actions'
+              isPrimary
+            />
+            <NavItem
+              icon={<BarChart2 size={20} />}
+              label='Stat'
+              href='/stats'
+            />
+            <NavItem
+              icon={<User size={20} />}
+              label='Profile'
+              href='/profile'
+            />
+          </div>
+          {/* <div className='mx-auto mb-1 h-1 w-1/3 rounded-full bg-slate-200' /> */}
         </div>
-        {/* <div className='mx-auto mb-1 h-1 w-1/3 rounded-full bg-slate-200' /> */}
       </div>
-    </div>
+    </>
   );
 };
 

@@ -3,7 +3,9 @@ import {cn} from "../lib/utils";
 import {Info, AlertCircle, CheckCircle2, XCircle, X} from "lucide-react";
 
 export default function Alert(props) {
-  if (!props.alert) return null; // If no alert is provided, don't render anything
+  const [isVisible, setIsVisible] = useState(true);
+  const [progress, setProgress] = useState(100);
+  const {message, variant, description, onClose, duration = 5000} = props;
 
   // Map the alert types to their respective styles;
   const alertStyles = {
@@ -17,12 +19,7 @@ export default function Alert(props) {
   };
 
   // Fallback to a default style if an unrecognized type is passed
-
-  const [isVisible, setIsVisible] = useState(true);
-  const [progress, setProgress] = useState(100);
-  const {message, type, description} = props;
-  const duration = 3000;
-  const alertClass = alertStyles[type] || alertStyles.info;
+  const alertClass = alertStyles[variant] || alertStyles.info;
   useEffect(() => {
     if (duration === 0) return; // Don't auto-dismiss if duration is 0
 
@@ -47,13 +44,15 @@ export default function Alert(props) {
 
   const handleClose = () => {
     setIsVisible(false);
-    setTimeout(() => {}, 300); // Wait for animation to complete
+    setTimeout(() => {
+      if (onClose) onClose();
+    }, 300); // Wait for animation to complete
   };
 
   if (!isVisible && !message) return null;
 
   const getIcon = () => {
-    switch (type) {
+    switch (variant) {
       case "success":
         return <CheckCircle2 className='h-5 w-5' />;
       case "danger":
@@ -68,46 +67,41 @@ export default function Alert(props) {
   };
 
   return (
-    <>
+    <div
+      className={cn(
+        "w-full transition-all duration-300 ease-in-out",
+        isVisible ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+      )}
+      role='alert'
+      aria-live='assertive'>
       <div
         className={cn(
-          "fixed top-8 right-6 z-100 transition-all duration-300 ease-in-out",
-          isVisible ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
-        )}
-        role='alert'
-        aria-live='assertive'>
-        <div
-          className={cn("p-4 flex gap-4 items-center rounded-lg", alertClass)}>
-          {getIcon()}
-          <div className='flex-1'>
-            <h5 className='font-medium leading-tight'>{message}</h5>
-            {description && (
-              <div className='mt-1 text-sm opacity-90'>{description}</div>
-            )}
-          </div>
-          <button
-            type='button'
-            onClick={handleClose}
-            className='ml-auto inline-flex h-6 w-6 items-center justify-center cursor-pointer rounded-full hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-offset-2'
-            aria-label='Close alert'>
-            <X className='h-4 w-4' />
-          </button>
-
-          {/* Progress bar for auto-dismiss */}
-          {duration > 0 && (
-            <div
-              className='absolute bottom-0 left-0 h-1 bg-current opacity-20 transition-all duration-100 ease-linear'
-              style={{width: `${progress}%`}}
-            />
+          "relative flex w-full max-w-sm items-center gap-3 rounded-lg border p-4 shadow-lg ",
+          alertClass
+        )}>
+        {getIcon()}
+        <div className='flex-1'>
+          <h5 className='font-medium leading-tight'>{message}</h5>
+          {description && (
+            <div className='mt-1 text-sm opacity-90'>{description}</div>
           )}
         </div>
+        <button
+          type='button'
+          onClick={handleClose}
+          className='ml-auto inline-flex h-6 w-6 items-center justify-center cursor-pointer rounded-full hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-offset-2'
+          aria-label='Close alert'>
+          <X className='h-4 w-4' />
+        </button>
+
+        {/* Progress bar for auto-dismiss */}
+        {duration > 0 && (
+          <div
+            className='absolute bottom-0 left-0 h-1 bg-current opacity-20 transition-all duration-100 ease-linear'
+            style={{width: `${progress}%`}}
+          />
+        )}
       </div>
-    </>
-    // <div
-    //   id='alert-1'
-    //   className={`fixed top-8 right-6 z-100 rounded-lg shadow-lg p-4 ${alertClass}`}
-    //   role='alert'>
-    //   <p className='text-sm font-medium text-center'>{message}</p>
-    // </div>
+    </div>
   );
 }
