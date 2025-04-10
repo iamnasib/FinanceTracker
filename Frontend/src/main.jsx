@@ -4,13 +4,16 @@ import "./index.css";
 import App from "./App.jsx";
 import AlertState from "./context/alert/AlertState.jsx";
 import AuthState from "./context/auth/AuthState";
+import AccountState from "./context/account/AccountState";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AlertState>
-      <AuthState>
-        <App />
-      </AuthState>
+      <AccountState>
+        <AuthState>
+          <App />
+        </AuthState>
+      </AccountState>
     </AlertState>
   </StrictMode>
 );

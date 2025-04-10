@@ -1,13 +1,14 @@
 import React, {useContext, useState, useEffect} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {Menu, X} from "lucide-react";
 import {Button} from "./ui/button";
 import AuthContext from "@/context/auth/AuthContext";
 
 const TopNav = (props) => {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const authContext = useContext(AuthContext);
-  const {isAuthenticated} = authContext;
+  const {isAuthenticated, logout} = authContext;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
     const checkAuth = async () => {
@@ -39,30 +40,58 @@ const TopNav = (props) => {
             </button>
           </div>
           {/* Larger screen's menu */}
-          {!isLoggedIn && (
-            <div className='hidden sm:flex gap-4 items-center'>
-              <Button className='cursor-pointer'>
-                <Link to='/login'>Login</Link>
+
+          <div className='hidden sm:flex gap-4 items-center'>
+            {!isLoggedIn ? (
+              <>
+                <Link to='/login'>
+                  <Button className='cursor-pointer'>Login</Button>
+                </Link>
+                <Link to='/signup'>
+                  <Button className='cursor-pointer'>Signup</Button>
+                </Link>
+              </>
+            ) : (
+              <Button
+                className='cursor-pointer bg-red-600 hover:bg-red-700 transition-all'
+                onClick={() => {
+                  logout(navigate);
+                }}>
+                Logout
               </Button>
-              <Button className='cursor-pointer'>
-                <Link to='/signup'>Signup</Link>
-              </Button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
         {/* Mobile menu */}
-        {!isLoggedIn && isOpen && (
+        {isOpen && (
           <div className='sm:hidden flex flex-col space-y-4 p-4 border-b border-slate-200 transition-all duration-500'>
-            <Button
-              onClick={() => setIsOpen(false)}
-              className='w-full cursor-pointer'>
-              <Link to='/login'>Login</Link>
-            </Button>
-            <Button
-              onClick={() => setIsOpen(false)}
-              className='w-full cursor-pointer'>
-              <Link to='/signup'>Signup</Link>
-            </Button>
+            {!isLoggedIn ? (
+              <>
+                <Link to='/login'>
+                  <Button
+                    onClick={() => setIsOpen(false)}
+                    className='w-full cursor-pointer'>
+                    Login
+                  </Button>
+                </Link>
+                <Link to='/signup'>
+                  <Button
+                    onClick={() => setIsOpen(false)}
+                    className='w-full cursor-pointer'>
+                    Signup
+                  </Button>
+                </Link>
+              </>
+            ) : (
+              <Button
+                className='cursor-pointer'
+                onClick={() => {
+                  logout(navigate);
+                  setIsOpen(!isOpen);
+                }}>
+                Logout
+              </Button>
+            )}
           </div>
         )}
       </nav>

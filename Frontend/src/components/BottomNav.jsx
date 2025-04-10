@@ -37,16 +37,11 @@ const BottomNav = () => {
               label='Card'
               href='/card'
             />
-            <NavItem
-              icon={<Plus size={22} />}
-              label=''
-              href='/actions'
-              isPrimary
-            />
+
             <NavItem
               icon={<BarChart2 size={20} />}
-              label='Stat'
-              href='/stats'
+              label='Accounts'
+              href='/accounts'
             />
             <NavItem
               icon={<User size={20} />}

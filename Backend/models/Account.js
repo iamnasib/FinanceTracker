@@ -22,6 +22,10 @@ const AccountSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  archive: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const Account = mongoose.model("account", AccountSchema);

@@ -78,7 +78,7 @@ const SignupForm = () => {
 
     if (validateForm()) {
       setIsLoading(true);
-      await signup(formData);
+      await signup(formData, navigate);
       setFormData({
         name: "",
         email: "",
@@ -87,7 +87,7 @@ const SignupForm = () => {
       });
       setIsLoading(false);
     }
-    navigate("/");
+    // navigate("/");
   };
 
   const getPasswordStrength = () => {
@@ -142,7 +142,7 @@ const SignupForm = () => {
               )}
             </div>
             <div className='space-y-2'>
-              <Label htmlFor='name'>Email</Label>
+              <Label htmlFor='email'>Email</Label>
               <Input
                 id='email'
                 type='email'
@@ -244,7 +244,7 @@ const SignupForm = () => {
             <Link
               to='/login'
               className='text-primary font-medium hover:underline'>
-              Sign in
+              Login
             </Link>
           </p>
         </CardFooter>

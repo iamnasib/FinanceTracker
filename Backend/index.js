@@ -1,5 +1,5 @@
 const path = require("path");
-require("dotenv").config({ path: path.resolve(__dirname, ".env.local") });
+require("dotenv").config({path: path.resolve(__dirname, ".env.local")});
 const express = require("express");
 const connectDB = require("./db");
 let cors = require("cors");
@@ -16,7 +16,7 @@ const startServer = async () => {
     app.use("/api/category", require("./routes/category"));
     app.use("/api/transaction", require("./routes/transaction"));
 
-    app.listen(port, () => {
+    app.listen(port, "0.0.0.0", () => {
       console.log(`Finance Tracking listening on ${port}`);
     });
   } catch (error) {
