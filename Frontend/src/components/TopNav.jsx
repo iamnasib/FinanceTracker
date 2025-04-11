@@ -5,14 +5,15 @@ import {Button} from "./ui/button";
 import AuthContext from "@/context/auth/AuthContext";
 
 const TopNav = (props) => {
+  const {appName, isAuthenticated} = props;
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const authContext = useContext(AuthContext);
-  const {isAuthenticated, logout} = authContext;
+  const {logout} = authContext;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
     const checkAuth = async () => {
-      setIsLoggedIn(await isAuthenticated());
+      setIsLoggedIn(isAuthenticated);
     };
     checkAuth();
   }, [isAuthenticated]);
@@ -28,12 +29,11 @@ const TopNav = (props) => {
         <div className='flex items-center justify-between border-b border-slate-200 p-4'>
           <Link to='/' className='flex items-center gap-2'>
             <img src='/logo.svg' alt='Logo' className='h-6 sm:h-9' />
-            <span className='text-lg uppercase font-semibold'>
-              {props.appName}
-            </span>
+            <span className='text-lg uppercase font-semibold'>{appName}</span>
           </Link>
           <div className='sm:hidden'>
             <button
+              aria-label='Toggle Navbar'
               onClick={toggleNavbar}
               className='text-slate-900 focus:outline-none cursor-pointer'>
               {isOpen ? <X /> : <Menu />}

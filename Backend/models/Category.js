@@ -18,6 +18,10 @@ const CategorySchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  archive: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const Category = mongoose.model("category", CategorySchema);

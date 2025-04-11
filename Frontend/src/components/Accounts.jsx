@@ -1,5 +1,5 @@
 import AccountContext from "@/context/account/AccountContext";
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState, useMemo} from "react";
 import {Link} from "react-router-dom";
 import {
   Archive,
@@ -24,22 +24,35 @@ const Accounts = () => {
   const {getAccounts} = accountContext;
   const [accounts, setAccounts] = useState([]);
   const [archive, setArchive] = useState(false);
+
   useEffect(() => {
-    const getAcc = async () => {
-      setAccounts(await getAccounts(archive)); // Fetch non-archived accounts
+    const fetchAccounts = async () => {
+      const fetchedAccounts = await getAccounts(archive);
+      if (fetchedAccounts) {
+        setAccounts(fetchedAccounts);
+      }
     };
-    getAcc();
+    fetchAccounts();
   }, [getAccounts, archive]);
 
-  // Group accounts by type
-  const groupedAccounts = accounts.reduce((groups, account) => {
-    const {type} = account;
-    if (!groups[type]) {
-      groups[type] = [];
+  const handleArchive = async (accountId) => {
+    const updatedAccounts = await getAccounts(archive);
+    if (updatedAccounts) {
+      setAccounts(updatedAccounts);
     }
-    groups[type].push(account);
-    return groups;
-  }, {});
+  };
+
+  // Memoize grouped accounts to prevent recalculation on every render
+  const groupedAccounts = useMemo(() => {
+    return accounts.reduce((groups, account) => {
+      const {type} = account;
+      if (!groups[type]) {
+        groups[type] = [];
+      }
+      groups[type].push(account);
+      return groups;
+    }, {});
+  }, [accounts]);
 
   return (
     <div className='space-y-2 py-6 px-4'>
@@ -60,9 +73,8 @@ const Accounts = () => {
         <CardContent>
           {Object.keys(groupedAccounts).map((type) => (
             <div className='space-y-2' key={type}>
-              <h2 className='flex item-center gap-1 text-lg font-medium mt-2 leading-none'>
+              <h2 className='flex items-center gap-1 text-lg font-medium leading-none'>
                 {type}{" "}
-                {/* <account.icon className={`h-5 w-5 ${account.iconColor}`} /> */}
                 {type === "Bank" ? (
                   <Landmark size={20} className='text-emerald-600' />
                 ) : type === "Credit Card" ? (
@@ -73,9 +85,13 @@ const Accounts = () => {
                   <Wallet size={20} className='text-purple-600' />
                 )}
               </h2>
-              <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3'>
+              <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3 mb-5'>
                 {groupedAccounts[type].map((account) => (
-                  <AccountItem key={account._id} account={account} />
+                  <AccountItem
+                    key={account._id}
+                    account={account}
+                    onArchive={handleArchive}
+                  />
                 ))}
               </div>
             </div>
@@ -83,7 +99,10 @@ const Accounts = () => {
         </CardContent>
       </Card>
 
-      <Link to='/add-account' className={"fixed bottom-18 right-4 z-50"}>
+      <Link
+        to='/add-account'
+        aria-label='Add Account'
+        className={"fixed bottom-18 right-4 z-50"}>
         <div className={"rounded-full bg-slate-950 p-3 text-slate-50"}>
           <Plus size={22} />
         </div>

@@ -1,6 +1,13 @@
 import React from "react";
 import {cn} from "../lib/utils";
-import {CreditCard, Home, User, Plus, BarChart2} from "lucide-react";
+import {
+  CreditCard,
+  Home,
+  User,
+  Plus,
+  BarChart2,
+  LayoutDashboard,
+} from "lucide-react";
 import {Link} from "react-router-dom";
 
 const NavItem = ({icon, label, href, isActive, isPrimary}) => {
@@ -42,6 +49,11 @@ const BottomNav = () => {
               icon={<BarChart2 size={20} />}
               label='Accounts'
               href='/accounts'
+            />
+            <NavItem
+              icon={<LayoutDashboard size={20} />}
+              label='Categories'
+              href='/categories'
             />
             <NavItem
               icon={<User size={20} />}

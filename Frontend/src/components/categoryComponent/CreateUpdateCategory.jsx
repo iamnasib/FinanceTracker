@@ -1,66 +1,59 @@
-import React, {useContext, useEffect} from "react";
-import {useState} from "react";
+import CategoryContext from "@/context/category/CategoryContext";
+import React, {useContext, useEffect, useState} from "react";
+import {useNavigate, useParams} from "react-router-dom";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "./ui/card";
-import {Label} from "./ui/label";
-import {Input} from "./ui/input";
-import {Button} from "./ui/button";
-import {useNavigate, useParams} from "react-router-dom";
-import AccountContext from "@/context/account/AccountContext";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from "../ui/card";
+import {Label} from "../ui/label";
+import {Input} from "../ui/input";
+import {Button} from "../ui/button";
 
-const CreateUpdateAccount = () => {
+const CreateUpdateCategory = () => {
   const navigate = useNavigate();
-  const accountContext = useContext(AccountContext);
-  const {createAccount, getTypes, getAccount, updateAccount} = accountContext;
+  const categoryContext = useContext(CategoryContext);
+  const {createCategory, getTypes, getCategory, updateCategory} =
+    categoryContext;
   const [formData, setFormData] = useState({
     name: "",
     type: "",
-    balance: "0",
   });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [types, setTypes] = useState([]);
 
   const params = useParams();
-  let accountId = params.id;
+  let categoryId = params.id;
 
   useEffect(() => {
-    const fetchAccount = async () => {
-      if (accountId) {
-        const account = await getAccount(accountId);
-        if (account) {
+    const fetchCategory = async () => {
+      if (categoryId) {
+        const category = await getCategory(categoryId);
+        if (category) {
           setFormData({
-            name: account.name,
-            type: account.type,
-            balance: account.balance,
+            name: category.name,
+            type: category.type,
           });
         } else {
           accountId = "";
-          navigate("/add-account");
+          navigate("/add-category");
         }
       }
       const types = await getTypes();
       setTypes(types);
     };
-    // const fetchTypes = async () => {
-    //   const types = await getTypes();
-    //   setTypes(types);
-    // };
 
-    // fetchTypes();
-    fetchAccount();
-  }, [getTypes, accountId, getAccount]);
+    fetchCategory();
+  }, [getTypes, categoryId, getCategory]);
   const validateForm = () => {
     const newErrors = {};
 
@@ -73,9 +66,6 @@ const CreateUpdateAccount = () => {
       newErrors.type = "Type is required";
     }
     //balance  Validation
-    if (parseFloat(formData.balance) < 0) {
-      newErrors.balance = "Balance must be a positive number";
-    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -101,20 +91,18 @@ const CreateUpdateAccount = () => {
 
     if (validateForm()) {
       setIsLoading(true);
-      if (accountId) {
-        await updateAccount(formData, accountId, navigate);
+      if (categoryId) {
+        await updateCategory(formData, categoryId, navigate);
       } else {
-        await createAccount(formData, navigate);
+        await createCategory(formData, navigate);
       }
 
       setFormData({
         name: "",
         type: "",
-        balance: 0,
       });
       setIsLoading(false);
     }
-    // navigate("/");
   };
 
   return (
@@ -123,17 +111,10 @@ const CreateUpdateAccount = () => {
         <Card className='w-full max-w-md mx-auto'>
           <CardHeader className='space-y-1'>
             <CardTitle className='text-2xl font-bold text-center'>
-              {accountId ? "Update Account" : "Add Account"}
+              {categoryId ? "Update Category" : "Add Category"}
             </CardTitle>
-            {/* <div className='flex items-center justify-between'>
-              <ArrowLeft onClick={() => navigate(-1)} />
-              <CardTitle className='text-2xl font-bold text-center'>
-                {accountId ? "Update Account" : "Add Account"}
-              </CardTitle>
-              <div></div> 
-            </div> */}
             <CardDescription className='text-center'>
-              Enter details to create your account
+              Create your own Custom Category
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -143,7 +124,7 @@ const CreateUpdateAccount = () => {
                 <Input
                   id='name'
                   name='name'
-                  placeholder='Savings Account'
+                  placeholder='Shopping'
                   value={formData.name}
                   onChange={handleChange}
                   className={errors.name ? "border-red-500" : ""}
@@ -153,12 +134,15 @@ const CreateUpdateAccount = () => {
                 )}
               </div>
               <div className='space-y-2'>
-                <Label htmlFor='type'>Account Type</Label>
+                <Label htmlFor='type'>Category Type</Label>
                 <DropdownMenu
                   id='type'
                   className={`${errors.type ? "border-red-500" : ""}`}>
                   <DropdownMenuTrigger asChild>
-                    <Button variant='outline' className='w-full justify-start'>
+                    <Button
+                      variant='outline'
+                      disabled={categoryId}
+                      className='w-full justify-start'>
                       {formData.type ? formData.type : "Select"}
                     </Button>
                   </DropdownMenuTrigger>
@@ -194,33 +178,18 @@ const CreateUpdateAccount = () => {
                   <p className='text-sm text-red-500'>{errors.type}</p>
                 )}
               </div>
-              <div className='space-y-2'>
-                <Label htmlFor='balance'>Balance</Label>
-                <Input
-                  id='balance'
-                  name='balance'
-                  placeholder='914'
-                  type='number'
-                  value={formData.balance}
-                  onChange={handleChange}
-                  className={errors.balance ? "border-red-500" : ""}
-                />
-                {errors.balance && (
-                  <p className='text-sm text-red-500'>{errors.balance}</p>
-                )}
-              </div>
 
               <Button
                 type='submit'
                 disabled={isLoading}
                 className='w-full cursor-pointer'>
                 {isLoading
-                  ? accountId
+                  ? categoryId
                     ? "Updating..."
                     : "Adding..."
-                  : accountId
-                  ? "Update Account"
-                  : "Add Account"}
+                  : categoryId
+                  ? "Update Category"
+                  : "Add Category"}
               </Button>
             </form>
           </CardContent>
@@ -230,4 +199,4 @@ const CreateUpdateAccount = () => {
   );
 };
 
-export default CreateUpdateAccount;
+export default CreateUpdateCategory;

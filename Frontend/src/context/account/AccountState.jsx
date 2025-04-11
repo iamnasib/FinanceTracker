@@ -9,7 +9,7 @@ const AccountState = (props) => {
   const getTypes = useCallback(async () => {
     return type;
   });
-  const createAccount = useCallback(async (formData) => {
+  const createAccount = useCallback(async (formData, navigate) => {
     try {
       const {name, type, balance = 0} = formData;
       const response = await fetch(`${backendUrl}/api/account/create`, {
@@ -39,6 +39,7 @@ const AccountState = (props) => {
         variant: "success",
         duration: 2000,
       });
+      navigate("/accounts");
     } catch (error) {
       showAlert(error.message, {
         variant: "danger",
@@ -89,7 +90,7 @@ const AccountState = (props) => {
     }
   });
 
-  const archiveAccount = useCallback(async (accountId, navigate) => {
+  const archiveAccount = useCallback(async (accountId) => {
     try {
       const response = await fetch(
         `${backendUrl}/api/account/archive/${accountId}`,
@@ -120,7 +121,6 @@ const AccountState = (props) => {
         variant: "success",
         duration: 2000,
       });
-      navigate("/accounts");
     } catch (error) {
       showAlert(error.message, {
         variant: "danger",

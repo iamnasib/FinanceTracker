@@ -1,4 +1,4 @@
-import React, {useCallback, useContext} from "react";
+import React, {useCallback, useContext, useMemo} from "react";
 import AuthContext from "./authContext";
 import backendUrl from "../../config";
 import AlertContext from "../alert/AlertContext";
@@ -84,13 +84,13 @@ const AuthState = (props) => {
     }
   });
 
-  const logout = useCallback((navigate) => {
+  const logout = useCallback(async (navigate) => {
+    await navigate("/login");
     localStorage.removeItem("authToken");
     showAlert("Logged out Succesfully", {
       variant: "success",
       duration: 1500,
     });
-    navigate("/login");
   });
   //Function to check if the user is authenticated
   const isAuthenticated = useCallback(async () => {
@@ -104,7 +104,7 @@ const AuthState = (props) => {
           authToken: localStorage.getItem("authToken"),
         },
       });
-      const data = await response.json();
+      // const data = await response.json();
       if (!response.ok) {
         return false;
       }
