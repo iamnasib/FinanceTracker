@@ -33,6 +33,16 @@ const Categories = () => {
       setCategories(updatedCategories);
     }
   };
+// const groupedCategories = useMemo(() => {
+//   return categories.reduce((map, category) => {
+//     const {type} = category;
+//     if (!map.has(type)) {
+//       map.set(type, []);
+//     }
+//     map.get(type).push(category);
+//     return map;
+//   }, new Map());
+// }, [categories]);
 
   // Memoize grouped categories to prevent recalculation on every render
   const groupedCategories = useMemo(() => {

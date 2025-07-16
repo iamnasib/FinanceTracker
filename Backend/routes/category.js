@@ -45,11 +45,22 @@ router.get("/get/:id", fetchUser, async (req, res) => {
 
 router.get("/get", fetchUser, async (req, res) => {
   try {
-    const isArchived = req.query.archived === "true";
-    let categories = await Category.find({
+    const isArchived = req.query.archived;
+    const type = req.query.type;
+
+    const query = {
       user: req.user,
-      archive: isArchived ? true : {$in: [false, null]},
-    }); //getting the user Id that we set in the fetchUser Middleware
+    }; //getting the user Id that we set in the fetchUser Middleware and apllying the archive logic
+
+    // Add type filter if specified
+    if (type) {
+      query.type = type;
+    }
+    if (isArchived !== "undefined" && isArchived !== "") {
+      query.archive = isArchived === "true";
+    }
+
+    let categories = await Category.find(query);
 
     // return success response with the categories that are found for the authenticated user
     return res.status(200).json({categories});

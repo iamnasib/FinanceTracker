@@ -1,6 +1,6 @@
 import CategoryContext from "@/context/category/CategoryContext";
 import React, {useContext, useEffect, useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,6 +11,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "../ui/card";
@@ -108,9 +109,9 @@ const CreateUpdateCategory = () => {
   return (
     <>
       <div className='container flex items-center justify-center py-6 px-4'>
-        <Card className='w-full max-w-md mx-auto'>
+        <Card className='w-full max-w-xl mx-auto'>
           <CardHeader className='space-y-1'>
-            <CardTitle className='text-2xl font-bold text-center'>
+            <CardTitle className='text-center'>
               {categoryId ? "Update Category" : "Add Category"}
             </CardTitle>
             <CardDescription className='text-center'>
@@ -118,7 +119,7 @@ const CreateUpdateCategory = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className='space-y-4'>
+            <form onSubmit={handleSubmit} className='space-y-6'>
               <div className='space-y-2'>
                 <Label htmlFor='name'>Name</Label>
                 <Input
@@ -178,19 +179,25 @@ const CreateUpdateCategory = () => {
                   <p className='text-sm text-red-500'>{errors.type}</p>
                 )}
               </div>
-
-              <Button
-                type='submit'
-                disabled={isLoading}
-                className='w-full cursor-pointer'>
-                {isLoading
-                  ? categoryId
-                    ? "Updating..."
-                    : "Adding..."
-                  : categoryId
-                  ? "Update Category"
-                  : "Add Category"}
-              </Button>
+              <CardFooter className='flex justify-between gap-2 px-0'>
+                <Link to='/categories'>
+                  <Button variant='outline' className='cursor-pointer '>
+                    Cancel
+                  </Button>
+                </Link>
+                <Button
+                  type='submit'
+                  disabled={isLoading}
+                  className='flex-1 cursor-pointer '>
+                  {isLoading
+                    ? categoryId
+                      ? "Updating..."
+                      : "Adding..."
+                    : categoryId
+                    ? "Update Category"
+                    : "Add Category"}
+                </Button>
+              </CardFooter>
             </form>
           </CardContent>
         </Card>

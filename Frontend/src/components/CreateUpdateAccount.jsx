@@ -4,13 +4,14 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "./ui/card";
 import {Label} from "./ui/label";
 import {Input} from "./ui/input";
 import {Button} from "./ui/button";
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import AccountContext from "@/context/account/AccountContext";
 import {
   DropdownMenu,
@@ -120,9 +121,9 @@ const CreateUpdateAccount = () => {
   return (
     <>
       <div className='container flex items-center justify-center py-6 px-4'>
-        <Card className='w-full max-w-md mx-auto'>
+        <Card className='w-full max-w-xl mx-auto'>
           <CardHeader className='space-y-1'>
-            <CardTitle className='text-2xl font-bold text-center'>
+            <CardTitle className='text-center'>
               {accountId ? "Update Account" : "Add Account"}
             </CardTitle>
             {/* <div className='flex items-center justify-between'>
@@ -137,7 +138,7 @@ const CreateUpdateAccount = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className='space-y-4'>
+            <form onSubmit={handleSubmit} className='space-y-6'>
               <div className='space-y-2'>
                 <Label htmlFor='name'>Name</Label>
                 <Input
@@ -209,19 +210,25 @@ const CreateUpdateAccount = () => {
                   <p className='text-sm text-red-500'>{errors.balance}</p>
                 )}
               </div>
-
-              <Button
-                type='submit'
-                disabled={isLoading}
-                className='w-full cursor-pointer'>
-                {isLoading
-                  ? accountId
-                    ? "Updating..."
-                    : "Adding..."
-                  : accountId
-                  ? "Update Account"
-                  : "Add Account"}
-              </Button>
+              <CardFooter className='flex justify-between gap-2 px-0'>
+                <Link to='/accounts'>
+                  <Button variant='outline' className='cursor-pointer '>
+                    Cancel
+                  </Button>
+                </Link>
+                <Button
+                  type='submit'
+                  disabled={isLoading}
+                  className='text-xs md:text-sm cursor-pointer flex-1'>
+                  {isLoading
+                    ? accountId
+                      ? "Updating..."
+                      : "Adding..."
+                    : accountId
+                    ? "Update Account"
+                    : "Add Account"}
+                </Button>
+              </CardFooter>
             </form>
           </CardContent>
         </Card>

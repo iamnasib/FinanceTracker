@@ -11,6 +11,8 @@ import CreateUpdateAccount from "./components/CreateUpdateAccount";
 import Accounts from "./components/Accounts";
 import Categories from "./components/categoryComponent/Categories";
 import CreateUpdateCategory from "./components/categoryComponent/CreateUpdateCategory";
+import Transactions from "./components/transactionComponent/Transactions";
+import CreateUpdateTransaction from "./components/transactionComponent/CreateUpdateTransaction";
 
 function App() {
   const appName = "Trance";
@@ -29,8 +31,9 @@ function App() {
   return (
     <Router>
       <TopNav appName={appName} isAuthenticated={isLoggedIn} />
+
       <Routes>
-        <Route path='/' element={<Home />} />
+        <Route path='/' element={<Transactions />} />
         <Route path='/signup' element={<SignupForm />} />
         <Route path='/login' element={<LoginForm />} />
 
@@ -43,6 +46,14 @@ function App() {
         <Route path='/categories' element={<Categories />} />
         <Route path='/add-category' element={<CreateUpdateCategory />} />
         <Route path='/update-category/:id' element={<CreateUpdateCategory />} />
+
+        {/* Transactions Routes */}
+        <Route path='/transactions' element={<Transactions />} />
+        <Route path='/add-transaction' element={<CreateUpdateTransaction />} />
+        <Route
+          path='/update-transaction/:id'
+          element={<CreateUpdateTransaction />}
+        />
       </Routes>
       {isLoggedIn && <BottomNav />}
     </Router>

@@ -112,10 +112,10 @@ const CategoryState = (props) => {
 
   // GET CATEGORIES API CALL
   const getCategories = useCallback(
-    async (archived) => {
+    async (archived, type = "") => {
       try {
         const response = await fetch(
-          `${backendUrl}/api/category/get?archived=${archived}`,
+          `${backendUrl}/api/category/get?archived=${archived}&type=${type}`,
           {
             method: "GET",
             headers: {

@@ -46,12 +46,15 @@ router.get("/get/:id", fetchUser, async (req, res) => {
 
 router.get("/get", fetchUser, async (req, res) => {
   try {
-    const isArchived = req.query.archived === "true";
-
-    let accounts = await Account.find({
+    const isArchived = req.query.archived;
+    const query = {
       user: req.user,
-      archive: isArchived, // Use the converted boolean value
-    });
+    };
+    if (isArchived !== "undefined" && isArchived !== "") {
+      query.archive = isArchived === "true";
+    }
+
+    let accounts = await Account.find(query);
     // return success response with the accounts that are found for the authenticated user
     return res.status(200).json({accounts});
   } catch (error) {
